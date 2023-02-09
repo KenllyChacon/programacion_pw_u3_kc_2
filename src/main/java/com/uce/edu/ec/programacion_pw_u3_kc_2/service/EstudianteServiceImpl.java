@@ -5,6 +5,9 @@ import com.uce.edu.ec.programacion_pw_u3_kc_2.repository.IEstudianteRespository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 @Service
 public class EstudianteServiceImpl implements IEstudianteService {
 
@@ -29,5 +32,15 @@ public class EstudianteServiceImpl implements IEstudianteService {
     @Override
     public void borrarEstudiante(Integer id) {
         this.estudianteRespository.borrarEstudiante(id);
+    }
+
+    @Override
+    public List<Estudiante> buscarTodos() {
+        return this.estudianteRespository.buscarTodos();
+    }
+
+    @Override
+    public List<Estudiante> buscarTodosPorSalario(BigDecimal salario) {
+        return this.estudianteRespository.buscarTodosPorSalario(salario);
     }
 }

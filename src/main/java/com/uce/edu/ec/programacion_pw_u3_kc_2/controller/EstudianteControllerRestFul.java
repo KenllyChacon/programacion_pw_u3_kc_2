@@ -7,6 +7,9 @@ import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 @RestController
 @RequestMapping("/estudiantes")
 public class EstudianteControllerRestFul {
@@ -15,7 +18,8 @@ public class EstudianteControllerRestFul {
     private IEstudianteService iEstudianteService;
 
     @PostMapping
-    public void insertarEstudiante(Estudiante estudiante) {
+    public void insertarEstudiante(@RequestBody Estudiante estudiante) {
+        this.iEstudianteService.registrarEstudiante(estudiante);
     }
 
     //estudiantes/buscar
@@ -24,12 +28,26 @@ public class EstudianteControllerRestFul {
         return this.iEstudianteService.encontrarEstudiante(id);
     }
 
+    @GetMapping
+    public List<Estudiante> buscarTodos(Integer id) {
+        return this.iEstudianteService.buscarTodos();
+    }
+
+    @GetMapping(path = "/salario")
+    public List<Estudiante> buscarTodosPorSalario(@RequestParam("salario") BigDecimal salario) {
+        return this.iEstudianteService.buscarTodosPorSalario(salario);
+    }
+
+
     @PutMapping(path = "/{id}")
-    public void actualizarEstudiante(@PathVariable("id") Estudiante estudiante) {
+    public void actualizarEstudiante(@PathVariable("id") Integer id, @RequestBody Estudiante estudiante,@RequestParam("provincia") String provincia) {
+        System.out.println(provincia);
+        estudiante.setId(id);
+        this.iEstudianteService.actualizarEstudiante(estudiante);
     }
 
     @PutMapping
-    public void actualizarTodos(Estudiante estudiante) {
+    public void actualizarTodos() {
     }
 
     @DeleteMapping(path = "{id}")
@@ -37,8 +55,13 @@ public class EstudianteControllerRestFul {
         this.iEstudianteService.borrarEstudiante(id);
     }
 
+    @PostMapping(path = "/borrar/{id}")
+    public void borrarTemp(@PathVariable("id") Integer id) {
+        this.iEstudianteService.borrarEstudiante(id);
+    }
+
     @DeleteMapping
-    public void borrarTodos(Integer id) {
+    public void borrarTodos() {
     }
 
 }
