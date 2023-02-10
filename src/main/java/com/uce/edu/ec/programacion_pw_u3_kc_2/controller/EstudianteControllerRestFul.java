@@ -5,6 +5,10 @@ import com.uce.edu.ec.programacion_pw_u3_kc_2.service.IEstudianteService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -29,8 +33,12 @@ public class EstudianteControllerRestFul {
     }
 
     @GetMapping
-    public List<Estudiante> buscarTodos(Integer id) {
-        return this.iEstudianteService.buscarTodos();
+    public ResponseEntity<List<Estudiante>> buscarTodos() {
+        HttpHeaders cabeceras = new HttpHeaders();
+        cabeceras.add("detalleMensaje", "Estudiante encontrado correctamente");
+        cabeceras.add("valorCalculado", "100");
+        List<Estudiante> lista = this.iEstudianteService.buscarTodos();
+        return new ResponseEntity<>(lista,cabeceras,230);
     }
 
     @GetMapping(path = "/salario")
