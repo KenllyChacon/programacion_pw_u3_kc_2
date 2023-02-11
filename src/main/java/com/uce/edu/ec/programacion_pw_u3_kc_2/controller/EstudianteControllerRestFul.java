@@ -2,13 +2,8 @@ package com.uce.edu.ec.programacion_pw_u3_kc_2.controller;
 
 import com.uce.edu.ec.programacion_pw_u3_kc_2.modelo.Estudiante;
 import com.uce.edu.ec.programacion_pw_u3_kc_2.service.IEstudianteService;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -27,7 +22,7 @@ public class EstudianteControllerRestFul {
     }
 
     //estudiantes/buscar
-    @GetMapping(path = "/{id}")
+    @GetMapping(path = "/{id}", produces = (MediaType.APPLICATION_XML_VALUE))
     public Estudiante buscarEstudiante(@PathVariable("id") Integer id) {
         return this.iEstudianteService.encontrarEstudiante(id);
     }
@@ -47,11 +42,12 @@ public class EstudianteControllerRestFul {
     }
 
 
-    @PutMapping(path = "/{id}")
-    public void actualizarEstudiante(@PathVariable("id") Integer id, @RequestBody Estudiante estudiante,@RequestParam("provincia") String provincia) {
-        System.out.println(provincia);
+    @PutMapping(path = "/{id}",consumes = {MediaType.APPLICATION_JSON_VALUE},produces = {MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<Estudiante> actualizarEstudiante(@PathVariable("id") Integer id, @RequestBody Estudiante estudiante, @RequestParam String provincia) {
         estudiante.setId(id);
         this.iEstudianteService.actualizarEstudiante(estudiante);
+        Estudiante est = this.iEstudianteService.encontrarEstudiante(id);
+        return ResponseEntity.status(HttpStatus.OK).body(est);
     }
 
     @PutMapping

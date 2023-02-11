@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "estudiante")
@@ -27,7 +28,27 @@ public class Estudiante {
     @Column(name = "estu_salario")
     private BigDecimal salario;
 
+    @OneToMany(mappedBy = "estudiante", fetch = FetchType.EAGER)
+    private List<Materia> materias;
+
     //SET Y GET
+
+    public List<Materia> getMaterias() {
+        return materias;
+    }
+
+    public void setMaterias(List<Materia> materias) {
+        this.materias = materias;
+    }
+
+    public LocalDateTime getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public void setFechaNacimiento(LocalDateTime fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
+    }
+
     public Integer getId() {
         return id;
     }
