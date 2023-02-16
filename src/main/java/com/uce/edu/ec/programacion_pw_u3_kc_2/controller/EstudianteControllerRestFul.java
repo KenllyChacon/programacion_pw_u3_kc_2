@@ -1,8 +1,14 @@
 package com.uce.edu.ec.programacion_pw_u3_kc_2.controller;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import com.uce.edu.ec.programacion_pw_u3_kc_2.modelo.Estudiante;
 import com.uce.edu.ec.programacion_pw_u3_kc_2.service.IEstudianteService;
+import com.uce.edu.ec.programacion_pw_u3_kc_2.service.to.EstudianteTo;
+import com.uce.edu.ec.programacion_pw_u3_kc_2.service.to.MateriaTo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,13 +33,28 @@ public class EstudianteControllerRestFul {
         return this.iEstudianteService.encontrarEstudiante(id);
     }
 
-    @GetMapping
+    /*@GetMapping
     public ResponseEntity<List<Estudiante>> buscarTodos() {
         HttpHeaders cabeceras = new HttpHeaders();
         cabeceras.add("detalleMensaje", "Estudiante encontrado correctamente");
         cabeceras.add("valorCalculado", "100");
         List<Estudiante> lista = this.iEstudianteService.buscarTodos();
         return new ResponseEntity<>(lista,cabeceras,230);
+    }*/
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<EstudianteTo> buscarTodosHateoas() {
+        List<EstudianteTo> lista = this.iEstudianteService.buscarTodosTo();
+        for (EstudianteTo estu:lista){
+            Link miLink = linkTo(methodOn(EstudianteControllerRestFul.class).buscarMaterias(estu.getId())).withRel("materias");
+            estu.add(miLink);
+        }
+        return lista;
+    }
+
+    @GetMapping(path = "/{idEstudiante}/materias")
+    public List<MateriaTo> buscarMaterias(@PathVariable("idEstudiante") Integer idEstudiante){
+        return null;
     }
 
     @GetMapping(path = "/salario")
@@ -42,7 +63,7 @@ public class EstudianteControllerRestFul {
     }
 
 
-    @PutMapping(path = "/{id}",consumes = {MediaType.APPLICATION_JSON_VALUE},produces = {MediaType.APPLICATION_XML_VALUE})
+    @PutMapping(path = "/{id}", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Estudiante> actualizarEstudiante(@PathVariable("id") Integer id, @RequestBody Estudiante estudiante, @RequestParam String provincia) {
         estudiante.setId(id);
         this.iEstudianteService.actualizarEstudiante(estudiante);

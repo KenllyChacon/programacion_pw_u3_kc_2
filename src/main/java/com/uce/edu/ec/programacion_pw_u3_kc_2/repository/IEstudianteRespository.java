@@ -1,6 +1,7 @@
 package com.uce.edu.ec.programacion_pw_u3_kc_2.repository;
 
 import com.uce.edu.ec.programacion_pw_u3_kc_2.modelo.Estudiante;
+import com.uce.edu.ec.programacion_pw_u3_kc_2.service.to.EstudianteTo;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
