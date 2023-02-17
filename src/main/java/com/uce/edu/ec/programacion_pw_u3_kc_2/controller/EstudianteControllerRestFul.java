@@ -5,6 +5,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import com.uce.edu.ec.programacion_pw_u3_kc_2.modelo.Estudiante;
 import com.uce.edu.ec.programacion_pw_u3_kc_2.service.IEstudianteService;
+import com.uce.edu.ec.programacion_pw_u3_kc_2.service.IMateriaService;
 import com.uce.edu.ec.programacion_pw_u3_kc_2.service.to.EstudianteTo;
 import com.uce.edu.ec.programacion_pw_u3_kc_2.service.to.MateriaTo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class EstudianteControllerRestFul {
 
     @Autowired
     private IEstudianteService iEstudianteService;
+
+    @Autowired
+    private IMateriaService iMateriaService;
 
     @PostMapping
     public void insertarEstudiante(@RequestBody Estudiante estudiante) {
@@ -47,15 +51,26 @@ public class EstudianteControllerRestFul {
         List<EstudianteTo> lista = this.iEstudianteService.buscarTodosTo();
         for (EstudianteTo estu:lista){
             Link miLink = linkTo(methodOn(EstudianteControllerRestFul.class).buscarMaterias(estu.getId())).withRel("materias");
+            Link miLink2 = linkTo(methodOn(EstudianteControllerRestFul.class).buscarEstudiante(estu.getId())).withSelfRel();
+            Link miLink3 = linkTo(EstudianteControllerRestFul.class).slash("prueba").slash("estudiante").slash(estu.getId()).withRel("enlacePrueba");
             estu.add(miLink);
+            estu.add(miLink2);
+            estu.add(miLink3);
+
         }
         return lista;
     }
 
-    @GetMapping(path = "/{idEstudiante}/materias")
+
+    @GetMapping(path = "/{idEstudiante}/materias", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<MateriaTo> buscarMaterias(@PathVariable("idEstudiante") Integer idEstudiante){
-        return null;
+        Link miLink = linkTo(methodOn(EstudianteControllerRestFul.class).iMateriaService.buscarMateria(idEstudiante))
+        materia = this.iMateriaService.buscarPorEstudiante(idEstudiante);
+        materia.add(miLink);
+        return this.iMateriaService.buscarPorEstudiante(idEstudiante);
     }
+
+
 
     @GetMapping(path = "/salario")
     public List<Estudiante> buscarTodosPorSalario(@RequestParam("salario") BigDecimal salario) {
