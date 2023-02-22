@@ -64,9 +64,9 @@ public class EstudianteControllerRestFul {
 
     @GetMapping(path = "/{idEstudiante}/materias", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<MateriaTo> buscarMaterias(@PathVariable("idEstudiante") Integer idEstudiante){
-        Link miLink = linkTo(methodOn(EstudianteControllerRestFul.class).iMateriaService.buscarMateria(idEstudiante))
+      /*  Link miLink = linkTo(methodOn(EstudianteControllerRestFul.class).iMateriaService.buscarMateria(idEstudiante))
         materia = this.iMateriaService.buscarPorEstudiante(idEstudiante);
-        materia.add(miLink);
+        materia.add(miLink);*/
         return this.iMateriaService.buscarPorEstudiante(idEstudiante);
     }
 

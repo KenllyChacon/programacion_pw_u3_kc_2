@@ -19,7 +19,8 @@ public class MateriaServiceImpl implements IMateriaService{
     public List<MateriaTo> buscarPorEstudiante(Integer idEstudiante) {
         List<Materia> lista = this.iMateriaRespository.buscarPorEstudiante(idEstudiante);
 //        return lista.stream().map(materia -> this.convertir(materia)).collect(Collectors.toList());
-        return lista.stream().map(this::convertir).toList();
+//        return lista.stream().map(this::convertir).toList();
+        return null;
     }
 
     @Override
